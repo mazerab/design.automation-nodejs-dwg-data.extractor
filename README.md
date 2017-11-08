@@ -12,7 +12,7 @@ This sample application demonstrates how to extract information (layers, blocks 
 
 # Setup
 
-Follow the instructions found in the README of the [DWG Query Activity Client Application](https://github.com/mazerab/design.automation-dwgquery-activity-clientapp) repository to create a new custom activity that this app will use to extract AutoCAD drawing metadata to Excel.
+Follow the instructions found in the [README](https://github.com/mazerab/design.automation-dwgquery-activity-clientapp/blob/master/README.md) of the [DWG Query Activity Client Application](https://github.com/mazerab/design.automation-dwgquery-activity-clientapp) repository to create a new custom activity that this app will use to extract AutoCAD drawing metadata to Excel.
 
 For using this sample, you need to log into your Autodesk developer account. Visit the [Forge Developer Portal](https://developer.autodesk.com) and sign up for an account, then [create an app](https://developer.autodesk.com/myapps/create). When asked for the 'callback URL' in your new app, use **http://localhost:3000/api/forge/callback/oauth**. Finally take note of the **Client ID** and **Client Secret**.
 
