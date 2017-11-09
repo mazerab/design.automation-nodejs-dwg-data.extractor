@@ -82,4 +82,4 @@ This sample is licensed under the terms of the [MIT License](http://opensource.o
 Please see the [LICENSE](LICENSE) file for full details.
 
 ## Written by
-Bastien Mazeran, Autodesk Premium Support Services
+Bastien Mazeran, [@bastien-mazeran-01200414](https://www.linkedin.com/in/bastien-mazeran-01200414/), [Autodesk Enterprise Priority Support](https://enterprisehub.autodesk.com/)
