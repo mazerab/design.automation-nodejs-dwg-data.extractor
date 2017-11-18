@@ -279,11 +279,27 @@ function writeWorkBookFromXml(filePath) {
                 var cell_ref = xlsx.utils.encode_cell({ c: i, r: 0 });
                 if (cell.v == null) continue;
                 ws[cell_ref] = cell; // Writes the property name to Excel header cells e.g. A1, B1, etc.
-                for (var R = range.s.r; R <= range.e.r; ++R) {
-                    cell = { v: jsonObj[name][R][keys[i]], t: 's' };
-                    cell_ref = xlsx.utils.encode_cell({ c: i, r: R + 1 });
-                    if (cell.v == null) continue;
-                    ws[cell_ref] = cell; // Writes the JSON data to the remaining cells
+                if (keys[i] == "Attributes") { // block attributes condition (Attributes breaks down into Tag and TextString)
+                    for (var R = range.s.r; R <= range.e.r; ++R) {
+                        var attArr = jsonObj[name][R][keys[i]];
+                        var attCollection = '';
+                        if (attArr.length > 0) {
+                            for (var k = 0; k < attArr.length; k++) {
+                                attCollection += attArr[k]['Tag'] + ":" + attArr[k]['Text'] + ";";
+                            }  
+                        }
+                        cell = { v: attCollection, t: 's' };
+                        cell_ref = xlsx.utils.encode_cell({ c: i, r: R + 1 });
+                        if (cell.v == null) continue;
+                        ws[cell_ref] = cell; // Writes the JSON data to the remaining cells
+                    }
+                } else {    
+                    for (var R = range.s.r; R <= range.e.r; ++R) {
+                        cell = { v: jsonObj[name][R][keys[i]], t: 's' };
+                        cell_ref = xlsx.utils.encode_cell({ c: i, r: R + 1 });
+                        if (cell.v == null) continue;
+                        ws[cell_ref] = cell; // Writes the JSON data to the remaining cells
+                    }
                 }
             }
             if (range.s.c < 10000000) ws['!ref'] = xlsx.utils.encode_range(range_w_headers);
