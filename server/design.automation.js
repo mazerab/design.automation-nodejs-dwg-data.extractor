@@ -35,17 +35,17 @@ router.post('/autocad.io/submitWorkItem', jsonParser, function (req, res) {
             res.status(401).end('Please login first');
             return;
         }
-
         getItem(req.body.projectId, req.body.itemId, req.body.fileName, tokenSession.getInternalOAuth(), tokenSession.getInternalCredentials(), res);
-
         res.end;
     }
 });
 
-router.get('/excel.io/isfileready', function (req, res) {
-    if (fs.existsSync('./server/data/results.xlsx')) {
-        res.json({ success: true });
-        res.end;
+router.get('/excel.io/isfileready', jsonParser, function (req, res) {
+    if (req.query.fileName) {
+        if (fs.existsSync('./server/data/' + req.query.fileName + '-results.xlsx')) {
+            res.json({ success: true });
+            res.end;
+        }
     }
 });
 
@@ -58,7 +58,7 @@ function getItem(projectId, itemId, fileName, oauthClient, credentials, res) {
                         for (var key in item.body.included) {  
                             var ossUrl = item.body.included[key].relationships.storage.meta.link.href;
                             console.log('Retrieved the OSS url ...' + ossUrl);
-                            submitItem(credentials.access_token, ossUrl, config.activity_name, res, function (ret, workItemId) {
+                            submitItem(credentials.access_token, ossUrl, fileName, config.activity_name, res, function (ret, workItemId) {
                                 if (ret) {
                                     // hand off response back to client to launch Excel and load results.xml data
                                 } else {
@@ -76,7 +76,7 @@ function getItem(projectId, itemId, fileName, oauthClient, credentials, res) {
 // The function creates the app package and the custom activity if not available and then submits the
 // workitem for the given drawing.
 //
-function submitItem(accessToken, ossUrl, activityName, res, callback) {
+function submitItem(accessToken, ossUrl, fileName, activityName, res, callback) {
     isPackageAvailable(config.package_endpoint, accessToken, config.package_name, function (status) {
         if (status) {
             isActivityAvailable(config.activity_endpoint, accessToken, activityName, function (status) {
@@ -95,7 +95,7 @@ function submitItem(accessToken, ossUrl, activityName, res, callback) {
                                             console.log("Work Item Output is: " + JSON.stringify(body.Output));
                                             var req = request(body.Output).pipe(fs.createWriteStream('./server/data/results.json'));
                                             req.on('finish', function () {
-                                                writeWorkBookFromXml('./server/data/results.json')
+                                                writeWorkBookFromXml('./server/data/results.json', fileName)
                                             });
                                             res.json({ success: true, message: 'WorkItem DWGQueryActivity Success: ', output: body.Output });
                                         }
@@ -133,14 +133,14 @@ function submitItem(accessToken, ossUrl, activityName, res, callback) {
  * 
  */
 function submitWorkItem(url, accessToken, activityName, ossUrl, callback) {
-    //var outputName = path.parse(fileName).name;
-    //console.log("outputName is: " + outputName);
-    var jsonParams = "data:application/json, " + JSON.stringify({ "ExtractBlockNames": true, "ExtractLayerNames": true, "ExtractDependents": true });
-    var workItemJson = { "Arguments": { "InputArguments": [{ "Resource": ossUrl, "Name": "HostDwg", "StorageProvider": "Generic", "Headers": [{ "Name": "Authorization", "Value": "Bearer " + accessToken }] }, { "Name": "Params", "ResourceKind": "Embedded", "Resource": jsonParams, "StorageProvider": "Generic" }], "OutputArguments": [{ "Name": "Results", "HttpVerb": "POST", "Resource": null }] }, "ActivityId": config.activity_name, "Id": "" };
+    let resultsJsonFile = require('path').resolve(__dirname, './data/results.json');
+    if (fs.existsSync(resultsJsonFile)) { fs.unlinkSync(resultsJsonFile) }
+    const jsonParams = "data:application/json, " + JSON.stringify({ "ExtractBlockNames": true, "ExtractLayerNames": true, "ExtractDependents": true });
+    let workItemJson = { "Arguments": { "InputArguments": [{ "Resource": ossUrl, "Name": "HostDwg", "StorageProvider": "Generic", "Headers": [{ "Name": "Authorization", "Value": "Bearer " + accessToken }] }, { "Name": "Params", "ResourceKind": "Embedded", "Resource": jsonParams, "StorageProvider": "Generic" }], "OutputArguments": [{ "Name": "Results", "HttpVerb": "POST", "Resource": null }] }, "ActivityId": config.activity_name, "Id": "" };
     console.log("Work Item Json: " + JSON.stringify(workItemJson));
     sendAuthData(url, "POST", accessToken, workItemJson, function (status, param) {
         if (status === 200 || status === 201) {
-            var paramObj = JSON.parse(param);
+            let paramObj = JSON.parse(param);
             console.log("Submitted work item ...");
             callback(true, paramObj.Id);
         } else {
@@ -259,7 +259,9 @@ function isActivityAvailable(url, accessToken, activityName, callback) {
 
 // The function writes new Excel workbook from JSON data
 //
-function writeWorkBookFromXml(filePath) {
+function writeWorkBookFromXml(filePath, fileName) {
+    let resultsXlsxFile = require('path').resolve(__dirname, './data/' + fileName + '-results.xlsx');
+    if (fs.existsSync(resultsXlsxFile)) { fs.unlinkSync(resultsXlsxFile) }
     fs.readFile(filePath, 'utf8', function (err, data) {
         if (err) throw err; // we'll not consider error handling for now
         var jsonObj = JSON.parse(data);
@@ -306,7 +308,7 @@ function writeWorkBookFromXml(filePath) {
             wb.SheetNames.push(name);
             wb.Sheets[name] = ws;
         }
-        var wbout = xlsx.writeFile(wb, './server/data/results.xlsx');
+        var wbout = xlsx.writeFile(wb, './server/data/' + fileName + '-results.xlsx');
     });
 }
 
