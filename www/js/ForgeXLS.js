@@ -20,14 +20,16 @@ var ForgeXLS = {
     if (status) {
       status(false, 'Preparing ' + fileName);
     }
+      
     $.post("/autocad.io/submitWorkItem", { "projectId": projectId, "itemId": itemId, "session": token, "fileName": fileName })
         .done(function (data) {
             // Call endpoint to see if file is ready to be served
-            $.get("/excel.io/isfileready")
+            $.get("/excel.io/isfileready", { "fileName": fileName } )
                 .done(function (data) {
                     // Open in Excel
                     if (data.success) {
-                        window.open("/data/results.xlsx");
+                        window.open("/data/" + fileName + "-results.xlsx");
+                        //window.open("/data/results.xlsx", "_blank", "", true);
                     }
                 });
         });
