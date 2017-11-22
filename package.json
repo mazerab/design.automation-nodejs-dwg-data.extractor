@@ -1,7 +1,7 @@
 {
-  "name": "design.automation-nodejs-pdf.exporter",
-  "version": "0.0.0",
-  "description": "design.automation-nodejs-pdf.exporter",
+  "name": "design.automation-nodejs-dwg-data.extractor",
+  "version": "1.0.0",
+  "description": "design.automation-nodejs-dwg-data.extractor",
   "main": "server.js",
   "author": {
     "name": "Bastien Mazeran"
