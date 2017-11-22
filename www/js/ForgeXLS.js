@@ -28,8 +28,7 @@ var ForgeXLS = {
                 .done(function (data) {
                     // Open in Excel
                     if (data.success) {
-                        window.open("/data/" + fileName + "-results.xlsx");
-                        //window.open("/data/results.xlsx", "_blank", "", true);
+                        let xlsxWindow = window.open("/data/" + fileName + "-results.xlsx");
                     }
                 });
         });
