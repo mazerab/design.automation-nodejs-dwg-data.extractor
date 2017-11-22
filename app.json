@@ -1,15 +1,14 @@
 {
-  "name": "Export to PDF",
-  "description": "Export to PDF",
-  "repository": "https://git.autodesk.com/mazerab/fusion360appstore-design.automation-nodejs-pdf.exporter",
+  "name": "Export to Excel",
+  "description": "Export to Excel",
+  "repository": "https://github.com/mazerab/design.automation-nodejs-dwg-data.extractor",
   "logo": "https://avatars0.githubusercontent.com/u/8017462?v=3&s=200",
   "keywords": [
     "express",
     "framework",
     "autodesk",
     "forge",
-    "template",
-    "bim360appstore"
+    "template"
   ],
   "env": {
     "FORGE_CLIENT_ID": {
@@ -20,9 +19,9 @@
     },
     "FORGE_CALLBACK_URL": {
       "description": "Callback URL of your Forge app, required for 3-legged OAuth",
-      "value": "https://<<YOUR HEROKU APP NAME HERE>>.herokuapp.com/api/forge/callback/oauth"
+      "value": "http://design-automation-nodejs-dwg-data.us-east-1.elasticbeanstalk.com/api/forge/callback/oauth"
     }
   },
-  "website": "https://fusion360pdf-exporter.herokuapp.com/",
+  "website": "http://design-automation-nodejs-dwg-data.us-east-1.elasticbeanstalk.com/",
   "success_url": "/"
 }
