@@ -49,6 +49,13 @@ router.get('/excel.io/isfileready', jsonParser, function (req, res) {
     }
 });
 
+router.get('/excel.io/delete', jsonParser, function (req, res) {
+    if (req.query.fileName) {
+        let resultsXlsxFile = require('path').resolve(__dirname, './data/' + req.query.fileName + '-results.xlsx');
+        if (fs.existsSync(resultsXlsxFile)) { fs.unlinkSync(resultsXlsxFile) }
+    }
+});
+
 module.exports = router;
 
 function getItem(projectId, itemId, fileName, oauthClient, credentials, res) {
@@ -260,8 +267,6 @@ function isActivityAvailable(url, accessToken, activityName, callback) {
 // The function writes new Excel workbook from JSON data
 //
 function writeWorkBookFromXml(filePath, fileName) {
-    let resultsXlsxFile = require('path').resolve(__dirname, './data/' + fileName + '-results.xlsx');
-    if (fs.existsSync(resultsXlsxFile)) { fs.unlinkSync(resultsXlsxFile) }
     fs.readFile(filePath, 'utf8', function (err, data) {
         if (err) throw err; // we'll not consider error handling for now
         var jsonObj = JSON.parse(data);
