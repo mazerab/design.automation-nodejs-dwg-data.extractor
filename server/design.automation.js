@@ -42,7 +42,7 @@ router.post('/autocad.io/submitWorkItem', jsonParser, function (req, res) {
 
 router.get('/excel.io/isfileready', jsonParser, function (req, res) {
     if (req.query.fileName) {
-        if (fs.existsSync('./server/data/' + req.query.fileName + '-results.xlsx')) {
+        if (fs.existsSync('./www/data/' + req.query.fileName + '-results.xlsx')) {
             res.json({ success: true });
             res.end;
         }
@@ -100,9 +100,9 @@ function submitItem(accessToken, ossUrl, fileName, activityName, res, callback) 
                                         console.log("Work Item Result is: " + JSON.stringify(body));
                                         if (statustext === "Succeeded") {
                                             console.log("Work Item Output is: " + JSON.stringify(body.Output));
-                                            var req = request(body.Output).pipe(fs.createWriteStream('./server/data/results.json'));
+                                            var req = request(body.Output).pipe(fs.createWriteStream('./www/data/results.json'));
                                             req.on('finish', function () {
-                                                writeWorkBookFromXml('./server/data/results.json', fileName)
+                                                writeWorkBookFromXml('./www/data/results.json', fileName)
                                             });
                                             res.json({ success: true, message: 'WorkItem DWGQueryActivity Success: ', output: body.Output });
                                         }
@@ -313,7 +313,7 @@ function writeWorkBookFromXml(filePath, fileName) {
             wb.SheetNames.push(name);
             wb.Sheets[name] = ws;
         }
-        var wbout = xlsx.writeFile(wb, './server/data/' + fileName + '-results.xlsx');
+        var wbout = xlsx.writeFile(wb, './www/data/' + fileName + '-results.xlsx');
     });
 }
 
