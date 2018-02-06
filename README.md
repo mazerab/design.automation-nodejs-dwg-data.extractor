@@ -17,6 +17,9 @@ Follow the instructions found in the [README](https://github.com/mazerab/design.
 The steps a developer needs to go through to setup the app are
 ![Developer Flow](https://github.com/mazerab/design.automation-nodejs-dwg-data.extractor/blob/master/www/img/developer_flow.png)
 
+The steps a user will go through when using the app are
+![User Flow](https://github.com/mazerab/design.automation-nodejs-dwg-data.extractor/blob/master/www/img/user_flow.png)
+
 For using this sample, you need to log into your Autodesk developer account. Visit the [Forge Developer Portal](https://developer.autodesk.com) and sign up for an account, then [create an app](https://developer.autodesk.com/myapps/create). When asked for the 'callback URL' in your new app, use **http://localhost:3000/api/forge/callback/oauth**. Finally take note of the **Client ID** and **Client Secret**.
 
 ### Run locally
