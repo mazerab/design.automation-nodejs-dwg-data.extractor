@@ -15,7 +15,7 @@ This sample application demonstrates how to extract information (layers, blocks 
 Follow the instructions found in the [README](https://github.com/mazerab/design.automation-dwgquery-activity-clientapp/blob/master/README.md) of the [DWG Query Activity Client Application](https://github.com/mazerab/design.automation-dwgquery-activity-clientapp) repository to create a new custom activity that this app will use to extract AutoCAD drawing metadata to Excel.
 
 The steps a developer needs to go through to setup the app are
-![Developer Flow](https://github.com/mazerab/design.automation-nodejs-dwg-data.extractor/blob/master/www/img/developer_flow.png)
+![Developer Flow](https://github.com/mazerab/design.automation-nodejs-dwg-data.extractor/blob/master/www/img/dev_flow.png)
 
 The steps a user will go through when using the app are
 ![User Flow](https://github.com/mazerab/design.automation-nodejs-dwg-data.extractor/blob/master/www/img/user_flow.png)
