@@ -1,3 +1,5 @@
+This code sample is *deprecated*, please use V3 Forge Design Automation API. 
+
 # Export to Excel
 
 ![alt text](https://github.com/mazerab/design.automation-nodejs-dwg-data.extractor/blob/master/www/img/export2excel.png)
